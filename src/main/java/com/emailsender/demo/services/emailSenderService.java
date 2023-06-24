@@ -21,7 +21,7 @@ public class emailSenderService {
     @Autowired
     private ResourceLoader resourceLoader;
 
-    public void sendEmail(String toEmail, String subject, String templateName) throws MessagingException, IOException {
+    public String sendEmail(String toEmail, String subject, String templateName) throws MessagingException, IOException {
         try {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
@@ -37,9 +37,11 @@ public class emailSenderService {
             mailSender.send(message);
 
             System.out.println("Email enviado");
+            return "Email enviado";
         } catch (MessagingException | IOException e) {
             System.out.println("Error al enviar el email");
             e.printStackTrace();
+            return "Error al enviar el email";
         }
 
     }
