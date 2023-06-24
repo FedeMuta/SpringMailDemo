@@ -8,6 +8,7 @@ import jakarta.mail.internet.MimeMessage;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 
@@ -17,6 +18,9 @@ public class emailSenderService {
     @Autowired
     private JavaMailSender mailSender;
 
+    @Autowired
+    private ResourceLoader resourceLoader;
+
     public void sendEmail(String toEmail, String subject) throws MessagingException, IOException {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
@@ -25,7 +29,7 @@ public class emailSenderService {
         helper.setTo(toEmail);
         helper.setSubject(subject);
         
-        String htmlMsg = "<h1>Email de prueba</h1>";
+        String htmlMsg = new String(resourceLoader.getResource("classpath:templates/send.html").getInputStream().readAllBytes());
         helper.setText(htmlMsg, true);
 
         mailSender.send(message);
