@@ -14,7 +14,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 
 @Service
 public class emailSenderService {
-    
+
     @Autowired
     private JavaMailSender mailSender;
 
@@ -22,21 +22,26 @@ public class emailSenderService {
     private ResourceLoader resourceLoader;
 
     public void sendEmail(String toEmail, String subject, String templateName) throws MessagingException, IOException {
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-        
-        helper.setFrom("noresponder@show-room.com.ar");
-        helper.setTo(toEmail);
-        helper.setSubject(subject);
-        
-        String htmlMsg = new String(resourceLoader.getResource("classpath:templates/"+templateName+".html").getInputStream().readAllBytes());
-        helper.setText(htmlMsg, true);
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
-        mailSender.send(message);
+            helper.setFrom("noresponder@show-room.com.ar");
+            helper.setTo(toEmail);
+            helper.setSubject(subject);
 
-        System.out.println("Email enviado");
+            String htmlMsg = new String(resourceLoader.getResource("classpath:templates/" + templateName + ".html")
+                    .getInputStream().readAllBytes());
+            helper.setText(htmlMsg, true);
+
+            mailSender.send(message);
+
+            System.out.println("Email enviado");
+        } catch (MessagingException | IOException e) {
+            System.out.println("Error al enviar el email");
+            e.printStackTrace();
+        }
 
     }
-
 
 }
