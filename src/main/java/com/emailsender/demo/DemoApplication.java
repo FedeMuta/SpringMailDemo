@@ -23,7 +23,7 @@ public class DemoApplication {
 
 	@EventListener(ApplicationReadyEvent.class)
 	public void triggerWhenStarts() throws MessagingException, IOException {
-		senderService.sendEmail("fedemuta@gmail.com", "Email de prueba");
+		senderService.sendEmail("fedemuta@gmail.com", "Email de prueba", "Send");
 	}
 
 }

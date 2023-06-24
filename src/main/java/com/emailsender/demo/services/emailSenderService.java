@@ -21,7 +21,7 @@ public class emailSenderService {
     @Autowired
     private ResourceLoader resourceLoader;
 
-    public void sendEmail(String toEmail, String subject) throws MessagingException, IOException {
+    public void sendEmail(String toEmail, String subject, String templateName) throws MessagingException, IOException {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
         
@@ -29,7 +29,7 @@ public class emailSenderService {
         helper.setTo(toEmail);
         helper.setSubject(subject);
         
-        String htmlMsg = new String(resourceLoader.getResource("classpath:templates/send.html").getInputStream().readAllBytes());
+        String htmlMsg = new String(resourceLoader.getResource("classpath:templates/"+templateName+".html").getInputStream().readAllBytes());
         helper.setText(htmlMsg, true);
 
         mailSender.send(message);
