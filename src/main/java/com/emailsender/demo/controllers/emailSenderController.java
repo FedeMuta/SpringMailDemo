@@ -7,7 +7,6 @@ import jakarta.mail.MessagingException;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,13 +21,11 @@ public class emailSenderController {
     @PostMapping("/sendEmail")
     public ResponseEntity<String> enviarEmail(@RequestParam String email,
             @RequestParam String subject,
-            @RequestParam String template) {
-        try {
+            @RequestParam String template) throws MessagingException, IOException {
+        
             String result = emailSenderService.sendEmail(email, subject, template);
             return ResponseEntity.ok(result);
-        } catch (MessagingException | IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
-    }
-
+        } 
 }
+
+
